@@ -1,0 +1,31 @@
+{
+    "moves": 21, 
+    "targets": [90000,120000,140000], 
+    "width": 9,
+    "height": 7,
+    "colours": 3,
+    "tilemap": [ 
+        "*2*SD1,*1*S,*0*S,M1*S,M2*S,M3*ST011,--,--,--",
+        "*0,*2,M1,M2,-OT009,--,--,--,-OT012",
+        "*2,M1,M1,-OT007,--,--,--,-OT010,-O",
+        "*2,M1,-OT005,--,--,--,-OT008,-O,-OD1",
+        "M1,M1T003,--,--,--,-OT006,-O,-O,M5",
+        "-OT001,--,--,--,-OT004,-O,-O,M5,M6",
+        "--,--,--,M3T002,-O,-OD1,M5,M6,M6"
+
+    ],
+    "goals": [ 
+        {
+            "type": "blue_circle",
+            "amount": 150
+        },
+        {
+            "type": "green_circle",
+            "amount": 150
+        },
+        {
+            "type": "metal_ball",
+            "amount": 50
+        }
+    ]
+}

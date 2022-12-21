@@ -1,0 +1,30 @@
+{
+    "moves": 30,
+    "targets": [90000, 120000, 150000],
+    "colours": 4,
+    "tilemap": [
+        "*4*S,*5*S,*5*S,*4*S,*4*S,*5*S,*2*S,*5*S,*5*|*S",
+        "**D1,**D1,*-D1,*/D1,*/D1,**D1,**D1,**D1,*-",
+        "M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,*4*-",
+        "M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,*2*-",
+        "M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,*5*-",
+        "M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,*1*-",
+        "M4D1,M2D1,M2D1,M2D1,M2D1,M2D1,M2D1,M4D1,*0*-",
+        "M6D1,M4D1,M2D1,M2D1,M2D1,M2D1,M4D1,M6D1,*3*-",
+        "M6D1,M6D1,M4D1,M2D1,M2D1,M4D1,M6D1,M6D1,*-"
+    ],
+    "goals": [
+        {
+            "type": "rainbow_circle",
+            "amount": 5
+        },
+        {
+            "type": "radial_circle",
+            "amount": 50
+        },
+        {
+            "type": "striped_circle",
+            "amount": 50
+        }
+    ]
+}

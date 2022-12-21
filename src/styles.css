@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'Noto Sans';
+    src: url(../public/Noto\ Sans.ttf) format("ttf");
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    src: url(../public/Segoe\ UI.ttf) format("ttf");
+}
+
+@font-face {
+    font-family: 'Segoe UI Semibold';
+    src: url(../public/Segoe\ UI\ Semibold.ttf) format("ttf");
+}
