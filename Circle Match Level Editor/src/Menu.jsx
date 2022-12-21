@@ -192,6 +192,9 @@ function Menu(props) {
     function changeCAttribute(n, attrib, to) {
         let g = [...cannons];
         g[n][attrib] = attrib === "type" ? to : Number(to);
+        const layered = "watermelon".split(",")
+        if (attrib === "type" && layered.includes(to.toLowerCase())) g[n].layer = 1;
+        else if (attrib === "type") g[n].layer = undefined;
         setCannons(g);
         props.sc(g);
     }
@@ -313,7 +316,7 @@ function Menu(props) {
             Add Cannon Data
         </button>)
         // Render the goals.
-        const gt = `Watermelon`
+        const gt = `Watermelon,Globe`
             .split(",")
         for (let i = 0; i < cannons.length; i++) {
             let c = cannons[i];
@@ -326,7 +329,7 @@ function Menu(props) {
             cItems.push(<button className="MenuGoalRemove" onClick={() => removeCannon(i)}>×</button>)
             cItems.push(<label className="MenuAreaLabel">Type
                 <select
-                    className="MenuAreaField" onChange={(e) => changeGoalAttribute(i, "type", e.target.value)}
+                    className="MenuAreaField" onChange={(e) => changeCAttribute(i, "type", e.target.value)}
                     value={c.type} style={{
                         width: "62%"
                     }}>
@@ -413,7 +416,11 @@ function Menu(props) {
             tilemap.push(row.join(","))
         }
         data.tilemap = tilemap;
-        data.cannons = cannons;
+        data.cannons = cannons.map(o=>({
+            type: o.type.toLowerCase(),
+            max: o.max,
+            level: o.level
+        }));
         // Allow thr user to save!
         const picker = window.showSaveFilePicker({
             suggestedName: props.l+".json",
@@ -431,7 +438,7 @@ function Menu(props) {
             await file.write(JSON.stringify(data));
             await file.close();
             // Add to levelNums.
-            console.log(props.l, props.lns)
+            console.log(data)
             if (!props.lns.includes(props.l)) {
                 let m = props.lns;
                 m.push(props.l);

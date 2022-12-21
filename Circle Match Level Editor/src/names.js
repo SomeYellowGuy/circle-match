@@ -37,7 +37,8 @@ const names = {
     "G2": "Held Globe",
     "G-": "Globe Exit",
     // Cannons
-    "CW": "Watermelon Cannon"
+    "CW": "Watermelon Cannon",
+    "CG": "Globe Cannon"
 }
 
 export default names;

@@ -1,0 +1,1 @@
+{"moves":8,"targets":[20000,40000,60000],"width":5,"height":7,"colours":3,"hard":2,"goals":[{"type":"globe","amount":12}],"tilemap":["CGCW*S*1,CWCG*S**,CGCW*S*1,CWCG*S**,CGCW*S**","**,**,*1,**,*1","*1,**,**,*1,**","**,*1,**,**,*1","*1,**,**,*1,**","**,**,*1,**,*1","G-*1,G-**,G-*1,G-**,G-**"],"cannons":[{"type":"globe","max":9},{"type":"watermelon","max":3}]}

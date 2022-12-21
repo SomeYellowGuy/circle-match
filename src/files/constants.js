@@ -22,7 +22,7 @@ const colourList = "blue.green.orange.purple.red.yellow".split(".")
 const TEST_MODE = false;
 
 /** The number of levels. */
-const LEVELS_COUNT = 100;
+const LEVELS_COUNT = 150;
 
 /** The initial list of goals. */
 const INITIAL_GOALS = {

@@ -547,7 +547,10 @@ function tick() {
                 ctx.fill();
             } else {
                 if (levelStars[l][1] > 1) ctx.fillStyle = "rgba(255,255,255,0.85)";
-                ctx.fillText(String(l + 1), x + levelLength / 2, y + levelLength * 3 / 4 + 5);
+                if (l >= 99) ctx.font = "86px Noto Sans";
+                let k = 0;
+                if (l >= 99) k -= 8;
+                ctx.fillText(String(l + 1), x + levelLength / 2, y + levelLength * 3 / 4 + 5 + k);
             }
             ctx.translate(x + levelLength / 2, y + levelLength / 2);
             ctx.rotate(Math.PI * 0.1)
@@ -1004,7 +1007,7 @@ function executeMatches() {
                         tilesToNullify = [];
                     }, 1000);
                 }
-            } else if (!levelEnd && ((!timeMode && moves < 1) || (timeMode && time <= 0)) && !goalsDone && (!goals.some(o => o.type === "score") || timeMode) && !canMakeMatch) {
+            } else if (!levelEnd && ((!timeMode && moves < 1) || (timeMode && time <= 0)) && !goalsDone && (!goals.some(o => o.type === "score") || timeMode) && !changed) {
                 setTimeout(() => {
                     // Fail :(
                     failLevel();
@@ -1293,7 +1296,9 @@ function regenerateCircles() {
                     for (let type of cannonTiles[y][x]) {
                         let layered = "watermelon".split(".").includes(type);
                         let amount = 0;
-                        if (layered) {
+                        if (type === "globe") {
+                            amount = tiles.flat().filter(o => "globe,globeHolder".split(",").includes(o)).length
+                        } else if (layered) {
                             for (let i = 0; i < 10; i++) {
                                 let a = tiles.flat().filter(o => o === type + String(i)).length;
                                 amount += a;
@@ -1304,10 +1309,13 @@ function regenerateCircles() {
                             // Max?
                             if (data.max) {
                                 console.log(amount);
-                                if (amount < data.max) {
+                                let shouldSpawn = true;
+                                if (type === "globe" && goals.some(o=>o.type==="globe") && amount >= (goals.filter(o=>o.type==="globe")[0].amount - goalsCollected.globe)) shouldSpawn = false;
+                                if (amount < data.max && shouldSpawn) {
                                     // Spawn!
                                     const l = {
-                                        watermelon: "watermelon" + (data.layer || 1)
+                                        watermelon: "watermelon" + (data.layer || 1),
+                                        globe: "globe"
                                     }
                                     tiles[y][x] = l[type];
                                     console.log(l[type]);
@@ -2136,6 +2144,7 @@ async function loadLevel(l) {
                         case "W3": finalTiles[y][x] = "watermelon3"; break;
                         // Cannons
                         case "CW": cannonTiles[y][x].push("watermelon"); break;
+                        case "CG": cannonTiles[y][x].push("globe"); break;
                         // FOR random circles: Don't do anything.
                         default:
                             if (tile[0] === "T") {

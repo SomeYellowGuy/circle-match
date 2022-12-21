@@ -58,7 +58,7 @@ const tabTiles = {
         name: "Cannons",
         layered: {
             name: "Layered Cannons",
-            tiles: ["CW"]
+            tiles: ["CW", "CG"]
         }
     }
 }
