@@ -5,4 +5,5 @@ Made with a canvas!
 
 ## Level Editor
 I created a level editor in React, for making levels in Circle Match.
-Go to the folder and run `npm start` to use it!
+It is in a separate repository I made.
+Click [here](https://github.com/vishmitasuvarna/circle-match-level-editor) to see it.
