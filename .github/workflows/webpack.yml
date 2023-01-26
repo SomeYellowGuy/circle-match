@@ -28,7 +28,7 @@ jobs:
         npx webpack
 
     - name: Deploy to GH Page
-      uses: vishmitasuvarna/vishmitasuvarna.github.io
+      uses: JamesIves/github-pages-deploy-action@4.1.1
       with:
         branch: gh-pages
         folder: dist
