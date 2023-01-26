@@ -5,7 +5,7 @@ config.mode = "production";
 
 config.output = {
     path: path.resolve(__dirname, 'build'),
-    filename: 'puzzle-slide.bundle.js',
+    filename: 'circle-match.bundle.js',
     clean: true
 };
 

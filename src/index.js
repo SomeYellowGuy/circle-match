@@ -25,6 +25,8 @@ let GRID_HEIGHT = 9;
 let X_OFFSET = 450 + 32;
 let Y_OFFSET = 10 + 32;
 
+let warnedSave = false;
+
 let ti = 0;
 let specialsToMake = [];
 let goalAnim = [];
@@ -143,7 +145,7 @@ let tiles;
 let initialButtons = 0;
 let levelColours = Array(...Array(LEVELS_COUNT)).map(() => LS_COLOURS.none);
 let levelStars = Array(...Array(LEVELS_COUNT)).map(() => [1, 2, 3]);
-let save;
+let save = INITIAL_SAVE;
 
 try {
     if (window.localStorage) {
@@ -151,11 +153,16 @@ try {
         if (!localStorage.getItem("circle.match.save")) {
             // Make the save file!
             console.log("Generating save!")
-            localStorage.setItem("circle.match.save", JSON.stringify(INITIAL_SAVE))
+            localStorage.setItem("circle.match.save", JSON.stringify(INITIAL_SAVE));
+            save = INITIAL_SAVE;
+        } else {
+            // Get it.
+            console.log("Restoring progress!")
+            save = JSON.parse(localStorage.getItem("circle.match.save"));
         }
     }
 } catch (e) {
-    console.warn("Your user settings don't allow local storage to be used! The game will break! Allow cookies for this game to have a NON-BROKEN experience!")
+    console.warn("Your user settings don't allow local storage to be used! The game won't be able to save progress.\n("+e+")")
 }
 
 function load() {
@@ -196,9 +203,9 @@ UIImage.src = UI;
 
 function tick() {
     try {
-        save = JSON.parse(localStorage.getItem("circle.match.save"));
+        localStorage.setItem("circle.match.save", JSON.parse(save))
     } catch (e) {
-        save = INITIAL_SAVE;
+        
     }
     sizeCanvas();
     if (playingLevel) {
@@ -380,7 +387,8 @@ function tick() {
                         try {
                             localStorage.setItem("circle.match.save", JSON.stringify(newSave));
                         } catch (e) {
-                            console.error("This game doesn't work properly without cookies.")
+                            if (!warnedSave) console.warn("Without cookies, this game won't be able to save progress. Allow cookies to save progress!");
+                            warnedSave = true;
                         }
                     }
                 } else {
@@ -461,6 +469,13 @@ function tick() {
         ctx.fillText("Play", 500 + 150, 500 + 100 - 200)
         ctx.globalAlpha = 1;
         ctx.fillText("Level Select", 500 + 150, 500 + 100)
+        ctx.fillStyle = "rgba(0,0,255,0.4)";
+        ctx.font = "20px Segoe UI Semibold";
+        ctx.textAlign = "left";
+        ctx.fillText("Editing the game, and want to create new levels? Click here!", 10, HEIGHT-10)
+        if (mouse.held && mouse.move[0] < WIDTH/2-100 && mouse.move[1] > HEIGHT-20) {
+            console.log("click")
+        }
     } else {
         ctx.fillStyle = "#88ccff";
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
@@ -1293,11 +1308,14 @@ function regenerateCircles() {
                     s = true;
                 }
                 if (cannonTiles[y][x].length > 0) {
-                    for (let type of cannonTiles[y][x]) {
+                    let c = Math.random() > 0.5 ? cannonTiles[y][x] : cannonTiles[y][x].slice().reverse();
+                    for (let type of c) {
                         let layered = "watermelon".split(".").includes(type);
                         let amount = 0;
                         if (type === "globe") {
                             amount = tiles.flat().filter(o => "globe,globeHolder".split(",").includes(o)).length
+                        } else if ("vertical_striped_circle,horizontal_striped_circle,radial_circle".split(",").includes(type)) {
+                            amount = tiles.flat().filter(o => o && o.slice(-8) === type[0].toUpperCase() + "SCircle").length
                         } else if (layered) {
                             for (let i = 0; i < 10; i++) {
                                 let a = tiles.flat().filter(o => o === type + String(i)).length;
@@ -1310,12 +1328,17 @@ function regenerateCircles() {
                             if (data.max) {
                                 console.log(amount);
                                 let shouldSpawn = true;
+                                if ("vertical_striped_circle,horizontal_striped_circle,radial_circle".split(",").includes(type) && showdownStarted) shouldSpawn = false;
                                 if (type === "globe" && goals.some(o=>o.type==="globe") && amount >= (goals.filter(o=>o.type==="globe")[0].amount - goalsCollected.globe)) shouldSpawn = false;
                                 if (amount < data.max && shouldSpawn) {
                                     // Spawn!
+                                    const r = colourList[Math.floor(Math.random() * numberOfColours)];
                                     const l = {
                                         watermelon: "watermelon" + (data.layer || 1),
-                                        globe: "globe"
+                                        globe: "globe",
+                                        vertical_striped_circle: r + "VSCircle",
+                                        horizontal_striped_circle: r + "HSCircle",
+                                        radial_circle: r + "RSCircle"
                                     }
                                     tiles[y][x] = l[type];
                                     console.log(l[type]);
@@ -1997,7 +2020,7 @@ async function loadLevel(l) {
     messageAnim = null;
     endMoves = null;
     levelEnd = false;
-    let levelData = await import(`./${TEST_MODE ? "test_levels" : "levels"}/${l}.json`);
+    let levelData = await import(/* webpackMode: "eager" */ `./${TEST_MODE ? "test_levels" : "levels"}/${l}.json`);
     if (!levelData) throw Error(`Level ${l} doesn't exist!`)
     /** The grid width. */
     GRID_WIDTH = levelData.width || 9;
@@ -2145,6 +2168,9 @@ async function loadLevel(l) {
                         // Cannons
                         case "CW": cannonTiles[y][x].push("watermelon"); break;
                         case "CG": cannonTiles[y][x].push("globe"); break;
+                        case "C-": cannonTiles[y][x].push("horizontal_striped_circle"); break;
+                        case "C|": cannonTiles[y][x].push("vertical_striped_circle"); break;
+                        case "CO": cannonTiles[y][x].push("radial_circle"); break;
                         // FOR random circles: Don't do anything.
                         default:
                             if (tile[0] === "T") {

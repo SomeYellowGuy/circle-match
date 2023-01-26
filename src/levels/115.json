@@ -1,0 +1,1 @@
+{"moves":11,"targets":[30000,50000,65000],"width":6,"height":6,"colours":3,"hard":0,"goals":[{"type":"metal_ball","amount":40}],"tilemap":["*S*0,*S*0,*S*0C-,M1*SC-,--,--","*0,*0,M1,M2,--,--","*0*-,M1,M2,M3,M4*S,M6*S","M1,M2,M3,M3,M4,M6","--,--,M4,M4,M4,M6","--,--,M6,M6,M6,M6"],"cannons":[{"type":"horizontal_striped_circle","max":1}]}

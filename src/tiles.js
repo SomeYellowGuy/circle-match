@@ -73,6 +73,10 @@ const tileMaps = {
     purple_circleOrder: {x: 377, y: 343, s: 56},
     rainbow_circleOrder: {x: 384, y: 165, s: 56},
     striped_circleOrder: {x: 384, y: 51, s: 56},
+    
+    horizontal_striped_circleOrder: {x: 384, y: 51, s: 56},
+    vertical_striped_circleOrder: {x: 504, y: 114, s: 56},
+
     radial_circleOrder: {x: 384, y: 109, s: 56},
     metal_ballOrder: {x: 504, y: 0, s: 56},
     scoreOrder: {x: 504, y: 54, s: 56},
