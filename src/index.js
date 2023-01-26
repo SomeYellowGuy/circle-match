@@ -471,10 +471,13 @@ function tick() {
         ctx.fillText("Level Select", 500 + 150, 500 + 100)
         ctx.fillStyle = "rgba(0,0,255,0.4)";
         ctx.font = "20px Segoe UI Semibold";
-        ctx.textAlign = "left";
-        ctx.fillText("Editing the game, and want to create new levels? Click here!", 10, HEIGHT-10)
-        if (mouse.held && mouse.move[0] < WIDTH/2-100 && mouse.move[1] > HEIGHT-20) {
-            console.log("click")
+        ctx.textAlign = "right";
+        ctx.fillText("Editing the game, and want to create new levels? Click here!", WIDTH-10, HEIGHT-10)
+        if (mouse.held && mouse.move[0] > WIDTH/2+100 && mouse.move[1] > HEIGHT-20 &&
+            document.location.href.includes("github.io") /* didn't put github username so that other forks have the same option */) {
+            console.log("Opened the level editor!")
+            window.open(document.location.href.replace("circle-match", "circle-match-level-editor")); // same reason
+            //
         }
     } else {
         ctx.fillStyle = "#88ccff";
@@ -1326,7 +1329,6 @@ function regenerateCircles() {
                         if (data) {
                             // Max?
                             if (data.max) {
-                                console.log(amount);
                                 let shouldSpawn = true;
                                 if ("vertical_striped_circle,horizontal_striped_circle,radial_circle".split(",").includes(type) && showdownStarted) shouldSpawn = false;
                                 if (type === "globe" && goals.some(o=>o.type==="globe") && amount >= (goals.filter(o=>o.type==="globe")[0].amount - goalsCollected.globe)) shouldSpawn = false;
@@ -1341,7 +1343,6 @@ function regenerateCircles() {
                                         radial_circle: r + "RSCircle"
                                     }
                                     tiles[y][x] = l[type];
-                                    console.log(l[type]);
                                     s = true;
                                     changed = true;
                                 }
@@ -2066,11 +2067,9 @@ async function loadLevel(l) {
         iColours = !!levelData.increaseColours;
         goals = levelData.goals;
         targets = levelData.targets
-        console.log(GRID_WIDTH, GRID_HEIGHT)
         for (let i = 0; i < goals.length; i++) goals[i].completion = null;
         finalTiles = makeTiles(GRID_WIDTH + 2, GRID_HEIGHT, levelData.colours);
         finalTiles = finalTiles.map(o => o.slice(0, -2))
-        console.log(GRID_WIDTH, GRID_HEIGHT, finalTiles)
         buttonTiles = []; encasingBlockerTiles = []; cannonTiles = [];
         cannonData = levelData.cannons || [];
         for (let i = 0; i < GRID_HEIGHT; i++) {
@@ -2338,3 +2337,7 @@ function init() {
 }
 
 load();
+
+// Some debug stuff
+
+window.showGameData = () => console.log("%c DATA:\n\n"+window.localStorage.getItem("circle.match.save"), "color:#222222")
